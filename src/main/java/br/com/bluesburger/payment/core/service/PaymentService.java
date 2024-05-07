@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -72,9 +75,9 @@ public class PaymentService implements PaymentPort {
     private Map<String, List<Payment.Item>> itemsToPayment(Payment payment) {
         Map<String, List<Payment.Item>> items = new HashMap<>();
 
-        items.put(ITEMS_PAYMENT_DISHES_KEY, payment.getDishes());
-        items.put(ITEMS_PAYMENT_DRINKS_KEY, payment.getDrinks());
-        items.put(ITEMS_PAYMENT_DESSERTS_KEY, payment.getDesserts());
+        items.put(ITEMS_PAYMENT_DISHES_KEY, isNull(payment.getDishes()) ? emptyList() : payment.getDishes());
+        items.put(ITEMS_PAYMENT_DRINKS_KEY, isNull(payment.getDrinks()) ? emptyList() : payment.getDrinks());
+        items.put(ITEMS_PAYMENT_DESSERTS_KEY, isNull(payment.getDesserts()) ? emptyList() : payment.getDesserts());
 
         return items;
     }

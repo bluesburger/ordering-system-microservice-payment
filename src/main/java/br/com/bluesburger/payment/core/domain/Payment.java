@@ -36,6 +36,7 @@ public class Payment {
 
     @Getter
     @Setter
+    @Builder
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor

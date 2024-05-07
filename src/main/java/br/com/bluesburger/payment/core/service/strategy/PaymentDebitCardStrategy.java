@@ -13,6 +13,6 @@ public class PaymentDebitCardStrategy implements PaymentStrategyPort {
     public Payment checkoutPayment(Payment payment) {
 
         // Essa implementacao sera desenvolvida futuramente.
-        return new Payment();
+        return payment;
     }
 }

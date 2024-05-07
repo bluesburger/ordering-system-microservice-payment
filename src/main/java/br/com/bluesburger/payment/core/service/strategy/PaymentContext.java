@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
-
 @Service
 @RequiredArgsConstructor
 public class PaymentContext {
@@ -22,13 +20,15 @@ public class PaymentContext {
 
     public Payment processPayment(Payment payment) {
         buildStrategies();
+        PaymentMethodEnum paymentMethod;
 
-        PaymentMethodEnum paymentMethod = PaymentMethodEnum.valueOf(payment.getPaymentMethod().toUpperCase());
-        PaymentStrategyPort strategy = paymentStrategies.get(paymentMethod);
-
-        if (isNull(strategy)) {
-            throw new IllegalArgumentException("O metodo de pagamento nao e suportado: " + paymentMethod);
+        try {
+            paymentMethod = PaymentMethodEnum.valueOf(payment.getPaymentMethod().toUpperCase());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("O metodo de pagamento nao e suportado: " + payment.getPaymentMethod());
         }
+
+        PaymentStrategyPort strategy = paymentStrategies.get(paymentMethod);
         return strategy.checkoutPayment(payment);
     }
 

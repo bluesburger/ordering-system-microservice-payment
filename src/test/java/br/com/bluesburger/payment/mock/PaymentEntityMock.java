@@ -13,7 +13,7 @@ public class PaymentEntityMock {
 
         paymentEntity.setPaymentId("123");
         paymentEntity.setOrderId("456");
-        paymentEntity.setTotalAmount(BigDecimal.valueOf(100));
+        paymentEntity.setTotalAmount(BigDecimal.ZERO);
         paymentEntity.setPaymentStatus(PaymentStatusEnum.PENDING.name());
 
         return paymentEntity;
