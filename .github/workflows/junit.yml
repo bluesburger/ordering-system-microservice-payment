@@ -19,7 +19,7 @@ jobs:
 
       - name: Build and run tests with JaCoCo
         env:
-          APPLICATION_TEST_PROPERTIES: "src/main/resources/application-test.properties"
+          APPLICATION_TEST_PROPERTIES: "ordering-system-microservice-payment\src\main\resources\application-test.properties"
         run: |
           mvn clean verify -Dspring.profiles.active=test -Dspring.config.location=$APPLICATION_TEST_PROPERTIES
 
