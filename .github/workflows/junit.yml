@@ -31,25 +31,25 @@ jobs:
 
       - name: Check coverage thresholds
         run: |
-              # Captura de COVERAGE e TOTAL_LINES usando sed
-            COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
-            TOTAL_LINES=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
-            
-            # Verifica se COVERAGE e TOTAL_LINES são valores numéricos
-            if ! [[ $COVERAGE =~ ^[0-9]+$ ]] || ! [[ $TOTAL_LINES =~ ^[0-9]+$ ]]; then
+          # Captura de COVERAGE e TOTAL_LINES usando sed
+          COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
+          TOTAL_LINES=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
+          
+          # Verifica se COVERAGE e TOTAL_LINES são valores numéricos
+          if ! [[ $COVERAGE =~ ^[0-9]+$ ]] || ! [[ $TOTAL_LINES =~ ^[0-9]+$ ]]; then
           echo "Erro: Falha ao extrair números de cobertura do relatório JaCoCo."
-            exit 1
-            fi
-            
-            # Cálculo de COVERAGE_PERCENT apenas se COVERAGE e TOTAL_LINES forem válidos
-            COVERAGE_PERCENT=$(echo "scale=2; $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES)" | bc -l)
-            
-            THRESHOLD=80
-            
-            # Avaliação da cobertura em relação ao limite
-            if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
+          exit 1
+          fi
+          
+          # Cálculo de COVERAGE_PERCENT apenas se COVERAGE e TOTAL_LINES forem válidos
+          COVERAGE_PERCENT=$(echo "scale=2; $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES)" | bc -l)
+          
+          THRESHOLD=80
+          
+          # Avaliação da cobertura em relação ao limite
+          if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
           echo "Erro: a cobertura está abaixo do limite ($THRESHOLD%)"
-            exit 1
-            elif (( $(echo "$COVERAGE_PERCENT > $THRESHOLD" | bc -l) )); then
-            echo "Cobertura está ok"
-            fi
+          exit 1
+          elif (( $(echo "$COVERAGE_PERCENT > $THRESHOLD" | bc -l) )); then
+          echo "Cobertura está ok"
+          fi
