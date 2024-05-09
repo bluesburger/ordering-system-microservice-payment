@@ -15,7 +15,6 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
 
       - name: Build and run tests with JaCoCo
         env:
