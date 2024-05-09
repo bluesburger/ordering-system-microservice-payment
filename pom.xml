@@ -129,6 +129,9 @@
                         <exclude>**/response/**</exclude>
                         <exclude>**/configuration/**</exclude>
                     </excludes>
+                    <includes>
+                        <include>**/*.properties</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
