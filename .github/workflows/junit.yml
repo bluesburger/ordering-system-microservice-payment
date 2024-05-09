@@ -31,21 +31,21 @@ jobs:
 
       - name: Check coverage thresholds
         run: |
-            COVERAGE=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
-            TOTAL_LINES=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
-            
-            if [[ ! $COVERAGE =~ ^[0-9]+$ || ! $TOTAL_LINES =~ ^[0-9]+$ ]]; then
-              echo "Error: Failed to parse coverage numbers from JaCoCo report."
+          COVERAGE=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
+          TOTAL_LINES=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
+          
+          if [[ ! $COVERAGE =~ ^[0-9]+$ || ! $TOTAL_LINES =~ ^[0-9]+$ ]]; then
+            echo "Error: Failed to parse coverage numbers from JaCoCo report."
             exit 1
-            fi
-            
-            COVERAGE_PERCENT=$(( $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES) ))
-            
-            THRESHOLD=80
-            
-            if (( $COVERAGE_PERCENT < $THRESHOLD )); then
-          echo "Error: coverage is below the threshold ($THRESHOLD%)"
+          fi
+          
+          COVERAGE_PERCENT=$(( $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES) ))
+          
+          THRESHOLD=80
+          
+          if (( $COVERAGE_PERCENT < $THRESHOLD )); then
+            echo "Error: coverage is below the threshold ($THRESHOLD%)"
             exit 1
-            else
+          else
             echo "Coverage is satisfactory"
-            fi
+          fi
