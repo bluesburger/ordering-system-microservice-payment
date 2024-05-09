@@ -15,6 +15,7 @@
     <description>payment processing application</description>
     <properties>
         <java.version>17</java.version>
+        <sonar.sources>src/main/java,src/test/java,src/main/resources,application-test.properties</sonar.sources>
     </properties>
     <dependencies>
         <dependency>
@@ -129,6 +130,11 @@
                         <exclude>**/configuration/**</exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
             </plugin>
         </plugins>
     </build>
