@@ -41,13 +41,10 @@ jobs:
             exit 1
             fi
             
-            # Calcular a porcentagem de cobertura
             COVERAGE_PERCENT=$(( $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES) ))
             
-            # Definir o limiar de cobertura desejado (80% neste exemplo)
             THRESHOLD=80
             
-            # Comparar a cobertura percentual com o limiar
             if (( $COVERAGE_PERCENT < $THRESHOLD )); then
           echo "Error: coverage is below the threshold ($THRESHOLD%)"
             exit 1
