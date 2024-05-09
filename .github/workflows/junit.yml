@@ -31,18 +31,26 @@ jobs:
 
       - name: Check coverage thresholds
         run: |
-          COVERAGE=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
-          TOTAL_LINES=$(sed -n 's/.*<counter type="LINE" covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
+          # Install xmlstarlet if not already installed
+          sudo apt-get update
+          sudo apt-get install -y xmlstarlet
           
+          # Extract coverage metrics from JaCoCo report
+          COVERAGE=$(xmlstarlet sel -t -v "sum(//counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+          TOTAL_LINES=$(xmlstarlet sel -t -v "sum(//counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+          
+          # Check if coverage metrics are valid numbers
           if [[ ! $COVERAGE =~ ^[0-9]+$ || ! $TOTAL_LINES =~ ^[0-9]+$ ]]; then
             echo "Error: Failed to parse coverage numbers from JaCoCo report."
             exit 1
           fi
           
+          # Calculate coverage percentage
           COVERAGE_PERCENT=$(( $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES) ))
           
           THRESHOLD=80
           
+          # Check coverage against threshold
           if (( $COVERAGE_PERCENT < $THRESHOLD )); then
             echo "Error: coverage is below the threshold ($THRESHOLD%)"
             exit 1
