@@ -21,7 +21,8 @@ jobs:
         run: |
           mvn clean verify -Dspring.profiles.active=test
 
-        APPLICATION_TEST_PROPERTIES: "src/main/resources/application-test.properties"
+        env:
+          APPLICATION_TEST_PROPERTIES: "src/main/resources/application-test.properties"
 
       - name: Upload JaCoCo coverage report
         uses: actions/upload-artifact@v2
