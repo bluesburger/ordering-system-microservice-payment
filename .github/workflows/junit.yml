@@ -14,7 +14,9 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '17'  # Define a versão do Java como 17
+          java-version: '17'
+          architecture: 'x64'
+          distribution: 'adopt'
 
       - name: Build and run tests with JaCoCo
         run: |
