@@ -17,6 +17,16 @@
         <java.version>17</java.version>
         <sonar.organization>bluesburger</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+        <!-- Configurar o host do SonarCloud -->
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!-- Chave do projeto no SonarCloud -->
+        <sonar.projectKey>c72646b2ac3a3783fa91f9e830c461104932b751</sonar.projectKey>
+        <!-- Nome do projeto no SonarCloud -->
+        <sonar.projectName>payment</sonar.projectName>
+        <!-- Configurar relatório de cobertura para o SonarCloud -->
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+
     </properties>
     <dependencies>
         <dependency>
