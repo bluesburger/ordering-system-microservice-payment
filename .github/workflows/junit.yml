@@ -34,7 +34,7 @@ jobs:
           THRESHOLD=80
           
           if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
-            echo "Erro: a cobertura está abaixo do limite ($THRESHOLD%)"
+            echo "Error: a cobertura está abaixo do limite ($THRESHOLD%)"
             exit 1
           else
             echo "Coverage is satisfactory"
