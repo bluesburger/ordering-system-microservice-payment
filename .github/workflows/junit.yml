@@ -1,55 +1,44 @@
-name: Measure coverage
+name: build
 
 on:
+  push:
+    branches: [ main ]
+    paths: [ '**.java', '.github/workflows/jacoco.yml', 'pom.xml' ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  jacoco-java-maven:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: '17'
           distribution: 'adopt'
+          java-version: '17'
 
-      - name: Build and run tests with JaCoCo
-        env:
-          APPLICATION_TEST_PROPERTIES: "src/main/resources/application-test.properties"
+      - name: Build with Maven
+        run: mvn -B package -Pcoverage
+
+      - name: Log coverage percentages to workflow output
         run: |
-          mvn clean verify -Dspring.config.location="$APPLICATION_TEST_PROPERTIES"
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branches = ${{ steps.jacoco.outputs.branches }}"
 
-      - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v2
+      - name: Upload JaCoCo coverage report as a workflow artifact
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
-          path: target/site/jacoco
+          path: target/site/jacoco/
 
-      - name: Check coverage thresholds
+      - name: Get the Coverage info
         run: |
-          # Captura de COVERAGE e TOTAL_LINES usando sed
-          COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/p' target/site/jacoco/jacoco.xml)
-          TOTAL_LINES=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/p' target/site/jacoco/jacoco.xml)
-          
-          # Verifica se COVERAGE e TOTAL_LINES são valores numéricos
-          if ! [[ $COVERAGE =~ ^[0-9]+$ ]] || ! [[ $TOTAL_LINES =~ ^[0-9]+$ ]]; then
-          echo "Erro: Falha ao extrair números de cobertura do relatório JaCoCo."
-          exit 1
-          fi
-          
-          # Cálculo de COVERAGE_PERCENT apenas se COVERAGE e TOTAL_LINES forem válidos
-          COVERAGE_PERCENT=$(echo "scale=2; $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES)" | bc -l)
-          
-          THRESHOLD=80
-          
-          # Avaliação da cobertura em relação ao limite
-          if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
-          echo "Erro: a cobertura está abaixo do limite ($THRESHOLD%)"
-          exit 1
-          elif (( $(echo "$COVERAGE_PERCENT > $THRESHOLD" | bc -l) )); then
-          echo "Cobertura está ok"
-          fi
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
