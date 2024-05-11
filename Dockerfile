@@ -1,5 +1,5 @@
 # Usando a imagem do Maven para compilar o aplicativo
-FROM maven:3.8-jdk-11 AS builder
+FROM maven:3.8-jdk-17 AS builder
 
 # Definindo o diretório de trabalho no contêiner
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean install -DskipTests=true
 
 # Usando a imagem do Amazon Corretto para executar o aplicativo
-FROM amazoncorretto:11-al2023-jdk
+FROM amazoncorretto:17-al3-jdk
 
 WORKDIR /app
 
