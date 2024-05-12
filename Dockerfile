@@ -1,5 +1,5 @@
 # Usando a imagem do Maven para compilar o aplicativo
-FROM maven:3.8-jdk-17 AS builder
+FROM maven:3.8.3-openjdk-17 AS builder
 
 # Definindo o diretório de trabalho no contêiner
 WORKDIR /app
