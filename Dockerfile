@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean install -DskipTests=true
 
 # Usando a imagem do Amazon Corretto para executar o aplicativo
-FROM amazoncorretto:17-al3-jdk
+FROM amazoncorretto:17-al2-native-jdk
 
 WORKDIR /app
 
