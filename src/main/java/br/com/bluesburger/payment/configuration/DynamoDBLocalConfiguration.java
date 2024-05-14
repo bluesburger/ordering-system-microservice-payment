@@ -1,5 +1,7 @@
 package br.com.bluesburger.payment.configuration;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -9,9 +11,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("!test")
+@Profile("test")
 @Configuration
-public class DynamoDBConfiguration {
+public class DynamoDBLocalConfiguration {
+
+    @Value("${aws.credentials.access_key_id}")
+    private String awsAccessKeyId;
+
+    @Value("${aws.credentials.secret_access_key}")
+    private String awsSecretKeyId;
 
     @Value("${aws.region}")
     private String awsRegion;
@@ -25,12 +33,16 @@ public class DynamoDBConfiguration {
     }
 
     private AmazonDynamoDB buildAmazonDynamoDB() {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKeyId, awsSecretKeyId);
+
         AwsClientBuilder.EndpointConfiguration awsClientBuilder = new AwsClientBuilder
                 .EndpointConfiguration(awsDynamoEndpoint, awsRegion);
 
         return AmazonDynamoDBClientBuilder
                 .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .withEndpointConfiguration(awsClientBuilder)
                 .build();
     }
+
 }
