@@ -2,8 +2,6 @@ package br.com.bluesburger.payment.adapters.in.payment;
 
 import br.com.bluesburger.payment.adapters.in.payment.dto.PaymentRequest;
 import br.com.bluesburger.payment.adapters.in.payment.dto.PaymentResponse;
-import br.com.bluesburger.payment.adapters.out.dynamo.entities.PaymentEntity;
-import br.com.bluesburger.payment.adapters.out.dynamo.repository.PaymentRepository;
 import br.com.bluesburger.payment.ports.PaymentPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
