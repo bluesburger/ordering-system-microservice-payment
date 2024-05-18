@@ -33,12 +33,14 @@ public class PaymentService implements PaymentPort {
     private final DynamoDBPort dynamoDBPort;
 
     @Override
-    public void updateStatusPayment(String paymentId) {
+    public String updateStatusPayment(String paymentId) {
         var paymentMercadoPago = getPayment(paymentId);
-        var payment = getPaymentByOrderId(paymentMercadoPago.getReferenceId());
+        var orderId = paymentMercadoPago.getReferenceId();
+        var payment = getPaymentByOrderId(orderId);
         payment.updateStatus(paymentMercadoPago.getPaymentStatus().toUpperCase());
-
         dynamoDBPort.update(payment.getId(), payment);
+
+        return orderId;
     }
 
     @Override

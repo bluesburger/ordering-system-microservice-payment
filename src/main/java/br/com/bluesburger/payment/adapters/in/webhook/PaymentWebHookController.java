@@ -28,10 +28,10 @@ public class PaymentWebHookController {
         if (isNull(data)) {
             return ResponseEntity.noContent().build();
         }
-        paymentPort.updateStatusPayment(data.getId());
-        sqsPort.sendMessage(event);
+        final var orderId = paymentPort.updateStatusPayment(data.getId());
+        sqsPort.sendMessage(orderId);
 
-        log.info("Webhook event processed");
+        log.info("Webhook event processed: {}", event);
         return ResponseEntity.ok().build();
     }
 }
