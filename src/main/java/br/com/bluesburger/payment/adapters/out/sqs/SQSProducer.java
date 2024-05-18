@@ -39,7 +39,7 @@ public class SQSProducer implements SQSPort {
             Message<OrderPaidQueueDTO> msg = MessageBuilder
                     .withPayload(messageQueue)
                     .setHeader(SqsMessageHeaders.SQS_GROUP_ID_HEADER, messageGroupId)
-                    .setHeader(SqsMessageHeaders.SQS_DEDUPLICATION_ID_HEADER, "sfdgsdfgsdfgsdfg")
+                    .setHeader(SqsMessageHeaders.SQS_DEDUPLICATION_ID_HEADER, message.toString())
                     .build();
 
             messagingTemplate.send(queueName, msg);
