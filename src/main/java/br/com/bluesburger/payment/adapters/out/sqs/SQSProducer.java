@@ -3,19 +3,14 @@ package br.com.bluesburger.payment.adapters.out.sqs;
 import br.com.bluesburger.payment.adapters.out.exception.SQSIntegrationException;
 import br.com.bluesburger.payment.adapters.out.sqs.dto.OrderPaidQueueDTO;
 import br.com.bluesburger.payment.ports.SQSPort;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
-import org.springframework.cloud.aws.messaging.core.SqsMessageHeaders;
-import org.springframework.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
+import org.springframework.cloud.aws.messaging.core.SqsMessageHeaders;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Component
