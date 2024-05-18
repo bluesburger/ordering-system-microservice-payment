@@ -7,5 +7,5 @@ public interface PaymentPort {
 
     Payment processPayment(Payment payment);
 
-    void updateStatusPayment(String paymentId);
+    String updateStatusPayment(String paymentId);
 }
