@@ -1,6 +1,7 @@
 package br.com.bluesburger.payment.adapters.out.sqs;
 
 import br.com.bluesburger.payment.adapters.out.exception.SQSIntegrationException;
+import br.com.bluesburger.payment.adapters.out.sqs.dto.OrderPaidQueueDTO;
 import br.com.bluesburger.payment.ports.SQSPort;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import org.springframework.cloud.aws.messaging.core.SqsMessageHeaders;
@@ -33,10 +34,12 @@ public class SQSProducer implements SQSPort {
     public void sendMessage(Object message) {
         log.info("Sending message: {} to queue: {}", message, queueName);
         try {
-            Message<Object> msg = MessageBuilder
-                    .withPayload(message)
+            var messageQueue = new OrderPaidQueueDTO(message.toString());
+
+            Message<OrderPaidQueueDTO> msg = MessageBuilder
+                    .withPayload(messageQueue)
                     .setHeader(SqsMessageHeaders.SQS_GROUP_ID_HEADER, messageGroupId)
-                    .setHeader(SqsMessageHeaders.SQS_DEDUPLICATION_ID_HEADER, message.toString())
+                    .setHeader(SqsMessageHeaders.SQS_DEDUPLICATION_ID_HEADER, "sfdgsdfgsdfgsdfg")
                     .build();
 
             messagingTemplate.send(queueName, msg);
