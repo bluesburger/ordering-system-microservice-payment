@@ -34,10 +34,7 @@
             **/domain/**,
             **/request/**,
             **/response/**,
-            **/performance/**.java,
-            **/bdd/**.java,
-            **/BluesBurguerOrderApplication.java,
-            **/data.sql
+            **/PaymentApplication.java,
         </sonar.coverage.exclusions>
     </properties>
     <dependencies>
