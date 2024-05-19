@@ -148,6 +148,15 @@
                             <formats>
                                 <format>XML</format>
                             </formats>
+                            <excludes>
+                                <exclude>**/dto/**</exclude>
+                                <exclude>**/entities/**</exclude>
+                                <exclude>**/domain/**</exclude>
+                                <exclude>**/request/**</exclude>
+                                <exclude>**/response/**</exclude>
+                                <exclude>**/configuration/**</exclude>
+                                <exclude>**/test/**</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                     <execution>
