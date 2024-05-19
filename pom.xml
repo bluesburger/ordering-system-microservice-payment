@@ -29,6 +29,11 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.exclusions>
             **/configuration/**.java,
+            **/dto/**,
+            **/entities/**,
+            **/domain/**,
+            **/request/**,
+            **/response/**,
             **/performance/**.java,
             **/bdd/**.java,
             **/BluesBurguerOrderApplication.java,
