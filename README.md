@@ -7,5 +7,5 @@ Comando para cobertura de testes: mvn clean test jacoco:report
 
 Coverage
 
-![Coverage](https://imgur.com/lsx8Eds)
 
+![Coverage](https://imgur.com/lsx8Eds)
