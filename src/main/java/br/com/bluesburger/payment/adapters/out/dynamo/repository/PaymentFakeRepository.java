@@ -1,6 +1,9 @@
 package br.com.bluesburger.payment.adapters.out.dynamo.repository;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -8,40 +11,48 @@ import org.springframework.stereotype.Repository;
 import br.com.bluesburger.payment.adapters.out.dynamo.entities.PaymentEntity;
 
 @Repository
-@Profile("local")
+@Profile("!prod")
 public class PaymentFakeRepository extends PaymentRepository {
+	
+	public static Map<String, PaymentEntity> PAYMENTS = new HashMap<>();
 	
 	public PaymentFakeRepository() {
 		super(null);
 	}
 
-	private static final String QR_CODE = "qwertyqwertyqwerty";
-
 	@Override
     public PaymentEntity save(PaymentEntity paymentEntity) {
+		paymentEntity.setPaymentId(UUID.randomUUID().toString());
+		PAYMENTS.putIfAbsent(paymentEntity.getPaymentId(), paymentEntity);
         return paymentEntity;
     }
 
 	@Override
     public PaymentEntity findById(String id) {
-        var totalAmount = new BigDecimal(100.00);
-        var orderId = "qwerty";
-        var userId = "qwerty";
-    	return new PaymentEntity(id, "qwerty", "method", "2024-08-01T00:37:54", "2024-08-01T00:50:12", "qwerty", QR_CODE, totalAmount, orderId, userId);
+		return Optional.ofNullable(PAYMENTS.get(id)).orElse(null);
     }
 
 	@Override
     public PaymentEntity findByOrderId(String orderId) {
-        return null;
+		try {
+		return PAYMENTS.entrySet().stream()
+				.filter(e -> e.getValue().getOrderId().equalsIgnoreCase(orderId))
+				.findFirst()
+				.get().getValue();
+		} catch(Exception e) {
+			return null;
+		}
     }
 
 	@Override
     public void delete(String paymentId) {
-    	//
+    	PAYMENTS.remove(paymentId);
     }
 
 	@Override
     public String update(String paymentId, PaymentEntity paymentEntity) {
+		PAYMENTS.remove(paymentId);
+		PAYMENTS.put(paymentId, paymentEntity);
         return paymentId;
     }
 }

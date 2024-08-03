@@ -17,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("prod")
-public class DynamoDBAdapter implements DynamoDBPort {
-
-    private final PaymentRepository paymentRepository;
+@Profile("!prod")
+public class DynamoDBFakeAdapter implements DynamoDBPort {
+	
+	private final PaymentRepository paymentRepository;
 
     @Override
     public void save(Payment payment) {
@@ -29,16 +29,20 @@ public class DynamoDBAdapter implements DynamoDBPort {
         final var paymentEntity = EntityMapper.mapperPaymentEntityToPayment(payment);
         paymentEntity.setPaymentStatus(PaymentStatusEnum.PENDING.name());
         paymentEntity.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        
+        var entity = paymentRepository.save(paymentEntity);
 
-        paymentRepository.save(paymentEntity);
-        log.info("saved payment {}", paymentEntity);
+        log.info("saved payment {}", entity);
     }
 
     @Override
     public Payment findById(String paymentId) {
         log.info("get payment: {}", paymentId);
 
-        final var paymentEntity = paymentRepository.findById(paymentId);
+        var paymentEntity = paymentRepository.findById(paymentId);
+//        final var paymentEntity = new PaymentEntity();
+//        paymentEntity.setPaymentStatus(PaymentStatusEnum.PENDING.name());
+//        paymentEntity.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
         Payment payment = EntityMapper.mapperPaymentToPaymentEntity(paymentEntity);
 
         log.info("payment: {}", paymentEntity);
@@ -49,7 +53,10 @@ public class DynamoDBAdapter implements DynamoDBPort {
     public Payment findByOrderId(String orderId) {
         log.info("get payment by orderID: {}", orderId);
 
-        final var paymentEntity = paymentRepository.findByOrderId(orderId);
+        var paymentEntity = paymentRepository.findByOrderId(orderId);
+//        final var paymentEntity = new PaymentEntity();
+//        paymentEntity.setPaymentStatus(PaymentStatusEnum.PENDING.name());
+//        paymentEntity.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
         Payment payment = EntityMapper.mapperPaymentToPaymentEntity(paymentEntity);
 
         log.info("payment: {}", paymentEntity);
@@ -59,7 +66,7 @@ public class DynamoDBAdapter implements DynamoDBPort {
     @Override
     public String update(String paymentId, Payment payment) {
         log.info("update payment: {}", paymentId);
-        final var paymentEntity = EntityMapper.mapperPaymentEntityToPayment(payment);
+        var paymentEntity = paymentRepository.findById(paymentId);
         paymentRepository.update(paymentId, paymentEntity);
         return paymentId;
     }
@@ -67,9 +74,7 @@ public class DynamoDBAdapter implements DynamoDBPort {
     @Override
     public void delete(String paymentId) {
         log.info("delete payment: {}", paymentId);
-
         paymentRepository.delete(paymentId);
-
         log.info("payment deleted");
 
     }

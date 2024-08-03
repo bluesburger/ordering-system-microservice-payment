@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-@Profile("!local")
+@Profile("prod")
 public class PaymentRepository {
 
     private final DynamoDBMapper dynamoDBMapper;

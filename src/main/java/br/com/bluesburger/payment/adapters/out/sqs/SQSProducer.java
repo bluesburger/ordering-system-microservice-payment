@@ -29,7 +29,7 @@ public class SQSProducer implements SQSPort {
     public void sendMessage(Object message) {
         log.info("Sending message: {} to queue: {}", message, queueName);
         try {
-            var messageQueue = new OrderPaidQueueDTO(message.toString());
+            var messageQueue = new OrderPaidQueueDTO(message.toString(), "PAID");
 
             Message<OrderPaidQueueDTO> msg = MessageBuilder
                     .withPayload(messageQueue)

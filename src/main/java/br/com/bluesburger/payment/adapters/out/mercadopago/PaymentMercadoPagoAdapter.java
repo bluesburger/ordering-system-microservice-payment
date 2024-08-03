@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("!local")
+@Profile("prod")
 public class PaymentMercadoPagoAdapter implements PaymentMercadoPagoPort {
 
     @Value("${mercado.pago.endpoint.payment}")
