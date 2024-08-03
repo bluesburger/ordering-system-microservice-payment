@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderPaidQueueDTO {
     private String orderId;
+    
+    private String paymentStatus;
 
     @Override
     public String toString() {
-        return "{\"orderId\":\""+ orderId +"\"}";
+        return "{\"orderId\":\""+ orderId +"\", \"paymentStatus\": \"" + paymentStatus + "\"}";
     }
 }
